@@ -7,6 +7,7 @@
 import 'package:flutter/material.dart';
 // @required is defined in the meta.dart package
 import 'package:meta/meta.dart';
+import 'package:tuple/tuple.dart';
 
 // We use an underscore to indicate that these variables are private.
 // See https://www.dartlang.org/guides/language/effective-dart/design#libraries
@@ -38,6 +39,10 @@ class Category extends StatelessWidget {
         assert(color != null),
         assert(iconLocation != null),
         super(key: key);
+
+  factory Category.fromTuple3(final Tuple3<String, Color, IconData> tuple3) {
+    return Category(name: tuple3.item1, color: tuple3.item2, iconLocation: tuple3.item3);
+  }
 
   /// Builds a custom widget that shows [Category] information.
   ///

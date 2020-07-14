@@ -2,9 +2,11 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:task_03_category_route/category.dart';
+import 'package:tuple/tuple.dart';
 
-// TODO: Check if we need to import anything
 
 // TODO: Define any constants
 
@@ -40,21 +42,40 @@ class CategoryRoute extends StatelessWidget {
     Colors.red,
   ];
 
+  static final _categories = <Tuple3<String, Color, IconData>>[
+    for (int i = 0; i < _categoryNames.length; i++)
+      Tuple3(_categoryNames[i], _baseColors[i], Icons.cake)
+  ];
+
   @override
   Widget build(BuildContext context) {
-    // TODO: Create a list of the eight Categories, using the names and colors
-    // from above. Use a placeholder icon, such as `Icons.cake` for each
-    // Category. We'll add custom icons later.
+    final listView = ListView.builder(
+      itemBuilder: this._buildCategory,
+      itemCount: _categories.length,
+    ).build(context);
 
-    // TODO: Create a list view of the Categories
-    final listView = Container();
-
-    // TODO: Create an App Bar
-    final appBar = AppBar();
+    final appBar = AppBar(
+      backgroundColor: Colors.transparent,
+      elevation: 0,
+      title: Center(
+        child: Text(
+          "Unit Converter",
+          style: TextStyle(fontSize: 30, color: Colors.black),
+        ),
+      ),
+    );
 
     return Scaffold(
+      backgroundColor: Colors.green[100],
       appBar: appBar,
-      body: listView,
+      body: Padding(
+        padding: EdgeInsets.symmetric(horizontal: 8),
+        child: listView
+      ),
     );
+  }
+
+  Widget _buildCategory(BuildContext context, int index) {
+    return Category.fromTuple3(_categories[index]);
   }
 }
