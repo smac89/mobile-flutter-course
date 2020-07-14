@@ -1,15 +1,37 @@
-include ':app'
+pluginManagement {
+    repositories {
+        gradlePluginPortal()
+        google()
+        jcenter()
+    }
 
-def flutterProjectRoot = rootProject.projectDir.parentFile.toPath()
-
-def plugins = new Properties()
-def pluginsFile = new File(flutterProjectRoot.toFile(), '.flutter-plugins')
-if (pluginsFile.exists()) {
-    pluginsFile.withReader('UTF-8') { reader -> plugins.load(reader) }
+    resolutionStrategy {
+        eachPlugin { PluginResolveDetails rule ->
+            switch (rule.requested.id.id) {
+                case 'com.android.application':
+                    rule.useModule("com.android.tools.build:gradle:${rule.requested.version ?: androidPluginVersion}")
+                    break
+                case 'kotlin-android':
+                    rule.useModule("org.jetbrains.kotlin:kotlin-gradle-plugin:${rule.requested.version ?: kotlinVersion}")
+                    break
+            }
+        }
+    }
 }
 
-plugins.each { name, path ->
-    def pluginDirectory = flutterProjectRoot.resolve(path).resolve('android').toFile()
-    include ":$name"
-    project(":$name").projectDir = pluginDirectory
+rootProject.name = 'unit_converter'
+
+include ':app'
+
+def localProps = new Properties().tap { p  ->
+    def localPropsFile = new File(getRootProject().projectDir, "local.properties")
+    if (localPropsFile.exists()) {
+        localPropsFile.withReader("utf-8") {
+            p.load(it)
+        }
+    }
+}
+
+localProps.getProperty("flutter.sdk")?.with {
+    apply from: "$it/packages/flutter_tools/gradle/app_plugin_loader.gradle"
 }

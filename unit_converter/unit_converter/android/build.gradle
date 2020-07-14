@@ -1,12 +1,9 @@
-buildscript {
-    repositories {
-        google()
-        jcenter()
-    }
+import com.gitlab.smac89.FlutterAndroidProjectPlugin
 
-    dependencies {
-        classpath 'com.android.tools.build:gradle:3.2.1'
-    }
+plugins {
+    id 'base'
+    id 'com.android.application' apply false
+    id 'kotlin-android' apply false
 }
 
 allprojects {
@@ -16,14 +13,19 @@ allprojects {
     }
 }
 
-rootProject.buildDir = '../build'
+rootProject.buildDir = "$rootProject.projectDir.parentFile/build"
+
+apply plugin: FlutterAndroidProjectPlugin
+
 subprojects {
-    project.buildDir = "${rootProject.buildDir}/${project.name}"
-}
-subprojects {
-    project.evaluationDependsOn(':app')
+    apply plugin: 'com.android.application'
+    apply plugin: 'kotlin-android'
+
+    buildDir = "${rootProject.buildDir}/${project.name}"
+    evaluationDependsOn(':app')
 }
 
-task clean(type: Delete) {
-    delete rootProject.buildDir
+wrapper {
+    distributionType = Wrapper.DistributionType.ALL
+    gradleVersion = '6.5'
 }
