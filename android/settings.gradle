@@ -1,0 +1,37 @@
+pluginManagement {
+    repositories {
+        gradlePluginPortal()
+        google()
+        jcenter()
+    }
+
+    resolutionStrategy {
+        eachPlugin { PluginResolveDetails rule ->
+            switch (rule.requested.id.id) {
+                case 'com.android.application':
+                    rule.useModule("com.android.tools.build:gradle:${rule.requested.version ?: androidPluginVersion}")
+                    break
+                case 'kotlin-android':
+                    rule.useModule("org.jetbrains.kotlin:kotlin-gradle-plugin:${rule.requested.version ?: kotlinVersion}")
+                    break
+            }
+        }
+    }
+}
+
+rootProject.name = '02_category_widget'
+
+include ':app'
+
+def localProps = new Properties().tap { p  ->
+    def localPropsFile = new File(getRootProject().projectDir, "local.properties")
+    if (localPropsFile.exists()) {
+        localPropsFile.withReader("utf-8") {
+            p.load(it)
+        }
+    }
+}
+
+localProps.getProperty("flutter.sdk")?.with {
+    apply from: "$it/packages/flutter_tools/gradle/app_plugin_loader.gradle"
+}
