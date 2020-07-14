@@ -1,4 +1,4 @@
-package com.example.02_category_widget
+package com.example.category_widget
 
 import io.flutter.embedding.android.FlutterActivity
 

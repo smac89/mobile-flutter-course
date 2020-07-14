@@ -19,7 +19,7 @@ pluginManagement {
     }
 }
 
-rootProject.name = '02_category_widget'
+rootProject.name = 'category_widget'
 
 include ':app'
 
