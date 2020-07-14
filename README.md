@@ -1,54 +1,33 @@
-# [Build Native Mobile Apps with Flutter](https://www.udacity.com/course/ud905)
+# Create the Category Screen!
 
-This repo contains everything you need for [Build Native Mobile Apps with Flutter, by Google and Udacity](https://www.udacity.com/course/ud905). The Unit Converter app has been broken down into sub-projects. To get started, [set up your development environment](https://flutter.io/setup) and clone this repo, using `git clone git@github.com:flutter/udacity-course.git` or `git clone https://github.com/flutter/udacity-course.git`.
+## Goals
+ - Create the home screen of the app.
+ - Create a ListView for the Categories.
 
-## Building the Complete Unit Converter App
-### Android Studio/IntelliJ
-1. Open the IDE and select `Import project (Gradle, Eclipse ADT, etc.)`. After you import the first time, you can use `Open an existing Android Studio project` in the future.
-2. Choose the `unit_converter` project folder, located in this repo at [`/unit_converter/unit_converter`](https://github.com/flutter/udacity-course/tree/master/unit_converter/unit_converter). Select `Next` for all setup instructions, making sure that the Source Files screen shows Flutter as an option.
-3. You can view your Flutter app files in the Projects tab in the Project Tool Window (View -> Tool Windows). Make sure your Flutter SDK is set and dependencies have been updated.
-4. Make sure your device/emulator is running. You can view the AVD Manager at Tools -> AVD Manager, or by typing `Ctrl/Cmd` + `Shift` + `a` and typing in 'AVD Manager'.
-5. Press the green Play button to run the app. Note that `main.dart` should be chosen in the dropdown on the left of the green Play button.
+## Steps
+ 1. Fill out the TODOs in `main.dart` and `category_route.dart` using the specs below.
+ 2. If you had customized your `category.dart`, you can replace our `category.dart` with yours.
+ 2. Customize your app if desired. Some ideas are listed below.
 
-### Command Line
-1. Run `cd ~/<repo location>/unit_converter/unit_converter`.
-2. Make sure your device/emulator is running.
-3. Run `flutter run`.
+## Specs
+ - The AppBar text should say 'Unit Converter' with a font size of 30.0, and an elevation of 0.0.
+ - A list of 8 Categories should be shown on the screen. You should be able to scroll down the list. There should be 8.0 horizontal padding around this list.
+ - The AppBar and app body should be the same color. In our example, we use `Colors.green[100]`.
 
-## Building Each Coding Exercise
-Each coding exercise for the Udacity course is located in the [`course` directory](https://github.com/flutter/udacity-course/tree/master/course). Each exercise is split into a standalone Task project and Solution project. The Solution is one of many possible solutions. You can compare your implementation with the solution using the `diff` command.
+## Customizations
+ - Whether to center the AppBar title.
+ - App's background color.
+ - InkWell color for each Category.
+ - Padding size.
 
-### Android Studio/IntelliJ
-1. Open the IDE and select `Import project (Gradle, Eclipse ADT, etc.)`. After you import the first time, you can use `Open an existing Android Studio project` in the future.
-2. Find the coding exercise you want to do and choose the `task_` project folder. For example, for the second coding exercise, `02_category_widget`, choose the `task_02_category_widget` project located in this repo at [`/course/2_category_widget/task_02_category_widget`](https://github.com/flutter/udacity-course/tree/master/course/02_category_widget/task_02_category_widget).
-3. You can view your Flutter app files in the Projects tab in the Project Tool Window (View -> Tool Windows). Make sure your Flutter SDK is set and dependencies have been updated.
-4. Make sure your device/emulator is running. You can view the AVD Manager at Tools -> AVD Manager, or by typing `Ctrl/Cmd` + `Shift` + `a` and typing in 'AVD Manager'.
-5. Press the green Play button to run the app. Note that `main.dart` should be chosen in the dropdown on the left of the green Play button.
-6. Follow the README and complete the TODOs in the coding exercise.
+## Screenshots
 
-# Style Guide
-Use strong mode.
+### Start
+<img src='../../screenshots/03_category_route.png' width='350'>
 
-# Contribution Guidelines
-Please feel free to file issues at https://github.com/flutter/udacity-course/issues. Flutter issues can be filed at https://github.com/flutter/flutter/issues.
+After the `main.dart` TODOs are complete:
 
-You can also contribute changes. Setting up:
-1. Fork `https://github.com/flutter/udacity-course` into your own GitHub account
-2. `git clone git@github.com:<your_name_here>/udacity-course.git`
-3. `cd udacity-course`
-4. `git remote add upstream git@github.com:flutter/udacity-course.git`
+<img src='../../screenshots/03_category_route_2.png' width='350'>
 
-Submitting changes:
-1. `git fetch upstream`
-2. `git checkout upstream/master -b name_of_your_branch`
-3. Make changes
-4. `git commit -a -m "<your informative commit message>"`
-5. `git push origin name_of_your_branch`
-
-To send a pull request:
-1. `git pull-request` (if you are using [Hub](https://hub.github.com/)) or go to https://github.com/flutter/udacity-course and click the "Compare & pull request" button
-2. Tag the relevant people and GitHub issue (if any)
-
-# Resources
-
-For a list of Flutter resources to help you get started as well as continue learning after the course, check [here](https://github.com/flutter/udacity-course/tree/master/resources.md).
+### Solution
+<img src='../../screenshots/03_category_route_3.png' width='350'><img src='../../screenshots/03_category_route_4.gif' width='350'>
