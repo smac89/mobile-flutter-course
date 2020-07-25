@@ -5,9 +5,7 @@
 // To keep your imports tidy, follow the ordering guidelines at
 // https://www.dartlang.org/guides/language/effective-dart/style#ordering
 import 'package:flutter/material.dart';
-// @required is defined in the meta.dart package
 import 'package:meta/meta.dart';
-
 import 'package:task_04_navigation/converter_route.dart';
 import 'package:task_04_navigation/unit.dart';
 
@@ -47,7 +45,28 @@ class Category extends StatelessWidget {
 
   /// Navigates to the [ConverterRoute].
   void _navigateToConverter(BuildContext context) {
-    // TODO: Using the Navigator, navigate to the [ConverterRoute]
+    var navigator = Navigator.of(context);
+    if (navigator.canPop()) {
+      navigator.pop();
+    }
+    navigator.push(MaterialPageRoute<Null>(
+        maintainState: false,
+        fullscreenDialog: true,
+        builder: (context) => Scaffold(
+            appBar: AppBar(
+                textTheme: Theme.of(context).textTheme,
+                title: Text(
+                  this.name,
+                  style: TextStyle(
+                      fontSize: 30),
+                ),
+                centerTitle: true,
+                leading: IconButton(
+                  icon: Icon(Icons.arrow_back),
+                  onPressed: navigator.pop,
+                ),
+                backgroundColor: this.color),
+            body: ConverterRoute(units: this.units, color: this.color))));
   }
 
   /// Builds a custom widget that shows [Category] information.
@@ -67,11 +86,9 @@ class Category extends StatelessWidget {
           borderRadius: _borderRadius,
           highlightColor: color,
           splashColor: color,
-          // We can use either the () => function() or the () { function(); }
-          // syntax.
-          // TODO: Update this onTap property to call _navigateToConverter()
           onTap: () {
             print('I was tapped!');
+            _navigateToConverter(context);
           },
           child: Padding(
             padding: EdgeInsets.all(8.0),
@@ -93,7 +110,7 @@ class Category extends StatelessWidget {
                   child: Text(
                     name,
                     textAlign: TextAlign.center,
-                    style: Theme.of(context).textTheme.headline,
+                    style: Theme.of(context).textTheme.headline5,
                   ),
                 ),
               ],
