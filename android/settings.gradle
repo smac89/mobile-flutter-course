@@ -19,7 +19,7 @@ pluginManagement {
     }
 }
 
-rootProject.name = 'hello_flutter'
+rootProject.name = 'stateful_widgets'
 
 include ':app'
 
