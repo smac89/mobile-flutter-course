@@ -14,4 +14,4 @@
 ## Screenshots
 
 ### Start and Solution (visually the same)
-<img src='../../screenshots/05_stateful_widgets.png' width='350'><img src='../../screenshots/05_stateful_widgets_2.png' width='350'>
+<img src='screenshots/05_stateful_widgets.png' width='350'><img src='screenshots/05_stateful_widgets_2.png' width='350'>
