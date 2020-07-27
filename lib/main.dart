@@ -5,9 +5,6 @@
 // You can read about packages here: https://flutter.io/using-packages/
 import 'package:flutter/material.dart';
 
-// You can use a relative import, i.e. `import 'category_route.dart;'` or
-// a package import, as shown below.
-// More details at http://dart-lang.github.io/linter/lints/avoid_relative_lib_imports.html
 import 'category_route.dart';
 
 /// The function that is called when main.dart is run.
@@ -25,7 +22,11 @@ class UnitConverterApp extends StatelessWidget {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       title: 'Unit Converter',
-      // TODO: Fill out the theme parameter
+      theme: ThemeData(
+          textTheme: TextTheme(
+              bodyText1: TextStyle(
+                  color: Colors.black, decorationColor: Colors.grey[600])),
+          primaryColor: Colors.grey[500]),
       home: CategoryRoute(),
     );
   }

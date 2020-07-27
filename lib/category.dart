@@ -54,7 +54,7 @@ class Category extends StatelessWidget {
             elevation: 1.0,
             title: Text(
               name,
-              style: Theme.of(context).textTheme.display1,
+              style: Theme.of(context).textTheme.headline4,
             ),
             centerTitle: true,
             backgroundColor: color,
@@ -86,9 +86,8 @@ class Category extends StatelessWidget {
         height: _rowHeight,
         child: InkWell(
           borderRadius: _borderRadius,
-          // TODO: Use the highlight and splash colors from the ColorSwatch
-          highlightColor: color,
-          splashColor: color,
+          highlightColor: color['highlight'],
+          splashColor: color['splash'],
           // We can use either the () => function() or the () { function(); }
           // syntax.
           onTap: () => _navigateToConverter(context),
@@ -112,7 +111,7 @@ class Category extends StatelessWidget {
                   child: Text(
                     name,
                     textAlign: TextAlign.center,
-                    style: Theme.of(context).textTheme.headline,
+                    style: Theme.of(context).textTheme.headline5,
                   ),
                 ),
               ],

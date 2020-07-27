@@ -19,7 +19,7 @@ class Unit {
         assert(conversion != null);
 
   /// Creates a [Unit] from a JSON object.
-  Unit.fromJson(Map jsonMap)
+  Unit.fromJson(Map<String, dynamic> jsonMap)
       : assert(jsonMap['name'] != null),
         assert(jsonMap['conversion'] != null),
         name = jsonMap['name'],

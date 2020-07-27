@@ -2,7 +2,10 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
+import 'dart:math';
+
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:meta/meta.dart';
 
 import 'unit.dart';
@@ -33,64 +36,120 @@ class ConverterRoute extends StatefulWidget {
 }
 
 class _ConverterRouteState extends State<ConverterRoute> {
-  // TODO: Set some variables, such as for keeping track of the user's input
-  // value and units
+  final formatter = NumberFormat('#.#######');
 
-  // TODO: Determine whether you need to override anything, such as initState()
-
-  // TODO: Add other helper functions. We've given you one, _format()
+  Unit inputUnit, outputUnit;
+  TextEditingController inputController, outputController;
 
   /// Clean up conversion; trim trailing zeros, e.g. 5.500 -> 5.5, 10.0 -> 10
-  String _format(double conversion) {
-    var outputNum = conversion.toStringAsPrecision(7);
-    if (outputNum.contains('.') && outputNum.endsWith('0')) {
-      var i = outputNum.length - 1;
-      while (outputNum[i] == '0') {
-        i -= 1;
-      }
-      outputNum = outputNum.substring(0, i + 1);
-    }
-    if (outputNum.endsWith('.')) {
-      return outputNum.substring(0, outputNum.length - 1);
-    }
-    return outputNum;
+  String format(double conversion) => formatter.format(conversion);
+
+  void swapUnits() {
+    setState(() {
+      var tempUnit = inputUnit;
+      inputUnit = outputUnit;
+      outputUnit = tempUnit;
+    });
   }
 
   @override
-  Widget build(BuildContext context) {
-    // TODO: Create the 'input' group of widgets. This is a Column that
-    // includes the input value, and 'from' unit [Dropdown].
+  void initState() {
+    super.initState();
+    if (widget.units.isNotEmpty) {
+      inputUnit = outputUnit = widget.units[0];
+    }
+    inputController = TextEditingController(text: "0");
+    outputController = TextEditingController(text: "0");
 
-    // TODO: Create a compare arrows icon.
+    inputController.addListener(() {
+      var input = inputController.text;
+      if (input?.isNotEmpty ?? false) {
+        var num = double.tryParse(input);
+        if (num != null) {
+          outputController.text = format(num);
+          return;
+        }
+      }
+      outputController.text = "";
+    });
+  }
 
-    // TODO: Create the 'output' group of widgets. This is a Column that
-    // includes the output value, and 'to' unit [Dropdown].
+  @override
+  void dispose() {
+    inputController.dispose();
+    outputController.dispose();
+    super.dispose();
+  }
 
-    // TODO: Return the input, arrows, and output widgets, wrapped in a Column.
-
-    // TODO: Delete the below placeholder code.
-    final unitWidgets = widget.units.map((Unit unit) {
-      return Container(
-        color: widget.color,
-        margin: EdgeInsets.all(8.0),
-        padding: EdgeInsets.all(16.0),
+  @override
+  Widget build(BuildContext context) => Container(
+        padding: _padding,
         child: Column(
           children: <Widget>[
-            Text(
-              unit.name,
-              style: Theme.of(context).textTheme.headline,
-            ),
-            Text(
-              'Conversion: ${unit.conversion}',
-              style: Theme.of(context).textTheme.subhead,
-            ),
+            createGroup(isInput: true),
+            Transform.rotate(
+                angle: pi / 2, // 90 degrees
+                child: IconButton(
+                  iconSize: 40,
+                  onPressed: swapUnits,
+                  icon: Icon(Icons.compare_arrows),
+                )),
+            createGroup(isInput: false)
           ],
         ),
       );
-    }).toList();
 
-    return ListView(
-      children: unitWidgets,
-    );
+  Widget createGroup({@required bool isInput}) => Padding(
+        padding: _padding,
+        child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: <Widget>[
+              TextFormField(
+                  style: TextStyle(fontSize: 24),
+                  readOnly: !isInput,
+                  keyboardType: TextInputType.number,
+                  autovalidate: true,
+                  validator: validateInput,
+                  controller: isInput ? inputController : outputController,
+                  decoration: InputDecoration(
+                      border: OutlineInputBorder(),
+                      labelText: isInput ? "Input" : "Output",
+                      hintText: "12")),
+              Padding(
+                padding: const EdgeInsets.symmetric(vertical: 8.0),
+                child: InputDecorator(
+                  decoration: InputDecoration(
+                      labelStyle: TextStyle(fontSize: 16),
+                      isDense: true,
+                      border: OutlineInputBorder()),
+                  child: DropdownButtonHideUnderline(
+                    child: DropdownButton<Unit>(
+                        isDense: true,
+                        value: isInput ? inputUnit : outputUnit,
+                        items: [
+                          for (var unit in widget.units)
+                            DropdownMenuItem(
+                                value: unit,
+                                child: Text(
+                                  unit.name,
+                                  style: TextStyle(fontWeight: FontWeight.bold),
+                                ))
+                        ],
+                        onChanged: (Unit newValue) => setState(() => isInput
+                            ? inputUnit = newValue
+                            : outputUnit = newValue)),
+                  ),
+                ),
+              )
+            ]),
+      );
+
+  String validateInput(String input) {
+    if (input?.isNotEmpty ?? false) {
+      if (double.tryParse(input) == null) {
+        return "Invalid number entered";
+      }
+    }
+    return null;
   }
 }
