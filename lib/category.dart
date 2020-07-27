@@ -54,7 +54,7 @@ class Category extends StatelessWidget {
             elevation: 1.0,
             title: Text(
               name,
-              style: Theme.of(context).textTheme.display1,
+              style: Theme.of(context).textTheme.headline4,
             ),
             centerTitle: true,
             backgroundColor: color,
@@ -108,7 +108,7 @@ class Category extends StatelessWidget {
                   child: Text(
                     name,
                     textAlign: TextAlign.center,
-                    style: Theme.of(context).textTheme.headline,
+                    style: Theme.of(context).textTheme.headline5,
                   ),
                 ),
               ],
