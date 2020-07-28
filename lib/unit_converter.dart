@@ -40,6 +40,13 @@ class _UnitConverterState extends State<UnitConverter> {
     _setDefaults();
   }
 
+  @override
+  void didUpdateWidget(UnitConverter oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    _createDropdownMenuItems();
+    _setDefaults();
+  }
+
   // TODO: _createDropdownMenuItems() and _setDefaults() should also be called
   // each time the user switches [Categories].
 
@@ -165,7 +172,7 @@ class _UnitConverterState extends State<UnitConverter> {
               value: currentValue,
               items: _unitMenuItems,
               onChanged: onChanged,
-              style: Theme.of(context).textTheme.title,
+              style: Theme.of(context).textTheme.headline6,
             ),
           ),
         ),
@@ -184,9 +191,9 @@ class _UnitConverterState extends State<UnitConverter> {
           // accepts numbers and calls the onChanged property on update.
           // You can read more about it here: https://flutter.io/text-input
           TextField(
-            style: Theme.of(context).textTheme.display1,
+            style: Theme.of(context).textTheme.headline4,
             decoration: InputDecoration(
-              labelStyle: Theme.of(context).textTheme.display1,
+              labelStyle: Theme.of(context).textTheme.headline4,
               errorText: _showValidationError ? 'Invalid number entered' : null,
               labelText: 'Input',
               border: OutlineInputBorder(
@@ -219,11 +226,11 @@ class _UnitConverterState extends State<UnitConverter> {
           InputDecorator(
             child: Text(
               _convertedValue,
-              style: Theme.of(context).textTheme.display1,
+              style: Theme.of(context).textTheme.headline4,
             ),
             decoration: InputDecoration(
               labelText: 'Output',
-              labelStyle: Theme.of(context).textTheme.display1,
+              labelStyle: Theme.of(context).textTheme.headline4,
               border: OutlineInputBorder(
                 borderRadius: BorderRadius.circular(0.0),
               ),
