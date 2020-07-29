@@ -31,6 +31,7 @@ class CategoryRoute extends StatefulWidget {
 class _CategoryRouteState extends State<CategoryRoute> {
   Category _defaultCategory;
   Category _currentCategory;
+
   // Widgets are supposed to be deeply immutable objects. We can update and edit
   // _categories as we build our app, and when we pass it into a widget's
   // `children` property, we call .toList() on it.
@@ -71,7 +72,11 @@ class _CategoryRouteState extends State<CategoryRoute> {
       'error': Color(0xFF912D2D),
     }),
   ];
-  // TODO: Add image asset paths here
+
+  static final _categoryIcons = [
+    ...["length", "area", "volume", "mass", "time", "digital_storage", "power"]
+        .map((e) => "assets/icons/$e.png")
+  ];
 
   @override
   Future<void> didChangeDependencies() async {
@@ -87,8 +92,7 @@ class _CategoryRouteState extends State<CategoryRoute> {
   Future<void> _retrieveLocalCategories() async {
     // Consider omitting the types for local variables. For more details on Effective
     // Dart Usage, see https://www.dartlang.org/guides/language/effective-dart/usage
-    final json = DefaultAssetBundle
-        .of(context)
+    final json = DefaultAssetBundle.of(context)
         .loadString('assets/data/regular_units.json');
     final data = JsonDecoder().convert(await json);
     if (data is! Map) {
@@ -100,12 +104,10 @@ class _CategoryRouteState extends State<CategoryRoute> {
           data[key].map<Unit>((dynamic data) => Unit.fromJson(data)).toList();
 
       var category = Category(
-        name: key,
-        units: units,
-        color: _baseColors[categoryIndex],
-        // TODO: Replace the placeholder icon with an icon image path
-        iconLocation: Icons.cake,
-      );
+          name: key,
+          units: units,
+          color: _baseColors[categoryIndex],
+          iconLocation: _categoryIcons[categoryIndex]);
       setState(() {
         if (categoryIndex == 0) {
           _defaultCategory = category;
