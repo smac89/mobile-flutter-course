@@ -32,7 +32,7 @@ class _UnitConverterState extends State<UnitConverter> {
   String _convertedValue = '';
   List<DropdownMenuItem> _unitMenuItems;
   bool _showValidationError = false;
-  // TODO: Pass this into the TextField so that the input value persists
+
   final _inputKey = GlobalKey(debugLabel: 'inputText');
 
   @override
@@ -168,8 +168,8 @@ class _UnitConverterState extends State<UnitConverter> {
       child: Theme(
         // This sets the color of the [DropdownMenuItem]
         data: Theme.of(context).copyWith(
-              canvasColor: Colors.grey[50],
-            ),
+          canvasColor: Colors.grey[50],
+        ),
         child: DropdownButtonHideUnderline(
           child: ButtonTheme(
             alignedDropdown: true,
@@ -177,7 +177,7 @@ class _UnitConverterState extends State<UnitConverter> {
               value: currentValue,
               items: _unitMenuItems,
               onChanged: onChanged,
-              style: Theme.of(context).textTheme.title,
+              style: Theme.of(context).textTheme.headline6,
             ),
           ),
         ),
@@ -196,9 +196,10 @@ class _UnitConverterState extends State<UnitConverter> {
           // accepts numbers and calls the onChanged property on update.
           // You can read more about it here: https://flutter.io/text-input
           TextField(
-            style: Theme.of(context).textTheme.display1,
+            key: _inputKey,
+            style: Theme.of(context).textTheme.headline4,
             decoration: InputDecoration(
-              labelStyle: Theme.of(context).textTheme.display1,
+              labelStyle: Theme.of(context).textTheme.headline4,
               errorText: _showValidationError ? 'Invalid number entered' : null,
               labelText: 'Input',
               border: OutlineInputBorder(
@@ -231,11 +232,11 @@ class _UnitConverterState extends State<UnitConverter> {
           InputDecorator(
             child: Text(
               _convertedValue,
-              style: Theme.of(context).textTheme.display1,
+              style: Theme.of(context).textTheme.headline4,
             ),
             decoration: InputDecoration(
               labelText: 'Output',
-              labelStyle: Theme.of(context).textTheme.display1,
+              labelStyle: Theme.of(context).textTheme.headline4,
               border: OutlineInputBorder(
                 borderRadius: BorderRadius.circular(0.0),
               ),
@@ -246,21 +247,22 @@ class _UnitConverterState extends State<UnitConverter> {
       ),
     );
 
-    // TODO: Use a ListView instead of a Column
-    final converter = Column(
-      crossAxisAlignment: CrossAxisAlignment.stretch,
-      children: [
-        input,
-        arrows,
-        output,
-      ],
-    );
+    final converter = ListView(children: [
+      input,
+      arrows,
+      output,
+    ]);
 
-    // TODO: Use an OrientationBuilder to add a width to the unit converter
-    // in landscape mode
-    return Padding(
-      padding: _padding,
-      child: converter,
-    );
+    return OrientationBuilder(builder: (context, orientation) {
+      if (orientation == Orientation.landscape) {
+        return Container(
+            width: 450, padding: _padding, child: Center(child: converter));
+      } else {
+        return Padding(
+          padding: _padding,
+          child: converter,
+        );
+      }
+    });
   }
 }
