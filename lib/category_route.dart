@@ -31,22 +31,13 @@ class CategoryRoute extends StatefulWidget {
 class _CategoryRouteState extends State<CategoryRoute> {
   Category _defaultCategory;
   Category _currentCategory;
+
   // Widgets are supposed to be deeply immutable objects. We can update and edit
   // _categories as we build our app, and when we pass it into a widget's
   // `children` property, we call .toList() on it.
   // For more details, see https://github.com/dart-lang/sdk/issues/27755
   final _categories = <Category>[];
-  // TODO: Remove _categoryNames as they will be retrieved from the JSON asset
-  static const _categoryNames = <String>[
-    'Length',
-    'Area',
-    'Volume',
-    'Mass',
-    'Time',
-    'Digital Storage',
-    'Energy',
-    'Currency',
-  ];
+
   static const _baseColors = <ColorSwatch>[
     ColorSwatch(0xFF6AB7A8, {
       'highlight': Color(0xFF6AB7A8),
@@ -83,49 +74,42 @@ class _CategoryRouteState extends State<CategoryRoute> {
     }),
   ];
 
-  // TODO: Remove the overriding of initState(). Instead, we use
-  // didChangeDependencies()
+  // wait for our JSON asset to be loaded in (async).
   @override
-  void initState() {
-    super.initState();
-    for (var i = 0; i < _categoryNames.length; i++) {
+  Future<void> didChangeDependencies() async {
+    super.didChangeDependencies();
+    // We have static unit conversions located in our
+    // assets/data/regular_units.json
+    if (_categories.isEmpty) {
+      await _retrieveLocalCategories();
+    }
+  }
+
+  /// Retrieves a list of [Categories] and their [Unit]s
+  Future<void> _retrieveLocalCategories() async {
+    // Consider omitting the types for local variables. For more details on Effective
+    // Dart Usage, see https://www.dartlang.org/guides/language/effective-dart/usage
+    final json = DefaultAssetBundle.of(context)
+        .loadString('assets/data/regular_units.json');
+    final data = JsonDecoder().convert(await json);
+    if (data is! Map) {
+      throw ('Data retrieved from API is not a Map');
+    }
+
+    List<String> categoryNames = data.keys.toList();
+
+    for (var i = 0; i < data.length; i++) {
       var category = Category(
-        name: _categoryNames[i],
+        name: categoryNames[i],
         color: _baseColors[i],
         iconLocation: Icons.cake,
-        units: _retrieveUnitList(_categoryNames[i]),
+        units: [for (var unit in data[categoryNames[i]]) Unit.fromJson(unit)],
       );
       if (i == 0) {
         _defaultCategory = category;
       }
       _categories.add(category);
     }
-  }
-
-  // TODO: Uncomment this out. We use didChangeDependencies() so that we can
-  // wait for our JSON asset to be loaded in (async).
-  //  @override
-  //  Future<void> didChangeDependencies() async {
-  //    super.didChangeDependencies();
-  //    // We have static unit conversions located in our
-  //    // assets/data/regular_units.json
-  //    if (_categories.isEmpty) {
-  //      await _retrieveLocalCategories();
-  //    }
-  //  }
-
-  /// Retrieves a list of [Categories] and their [Unit]s
-  Future<void> _retrieveLocalCategories() async {
-    // Consider omitting the types for local variables. For more details on Effective
-    // Dart Usage, see https://www.dartlang.org/guides/language/effective-dart/usage
-    final json = DefaultAssetBundle
-        .of(context)
-        .loadString('assets/data/regular_units.json');
-    final data = JsonDecoder().convert(await json);
-    if (data is! Map) {
-      throw ('Data retrieved from API is not a Map');
-    }
-    // TODO: Create Categories and their list of Units, from the JSON asset
   }
 
   /// Function to call when a [Category] is tapped.
@@ -162,20 +146,6 @@ class _CategoryRouteState extends State<CategoryRoute> {
         }).toList(),
       );
     }
-  }
-
-  // TODO: Delete this function; instead, read in the units from the JSON asset
-  // inside _retrieveLocalCategories()
-  /// Returns a list of mock [Unit]s.
-  List<Unit> _retrieveUnitList(String categoryName) {
-    // when the app first starts up
-    return List.generate(10, (int i) {
-      i += 1;
-      return Unit(
-        name: '$categoryName Unit $i',
-        conversion: i.toDouble(),
-      );
-    });
   }
 
   @override
