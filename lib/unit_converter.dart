@@ -91,7 +91,7 @@ class _UnitConverterState extends State<UnitConverter> {
   }
 
   // Remember, the API call is an async function.
-  void _updateConversion() async {
+  Future<void> _updateConversion() async {
     if (widget.category.name == 'Currency') {
       var conversion = _format(await api.convert(
           Currency(_fromValue.name), Currency(_toValue.name), _inputValue));
