@@ -2,11 +2,9 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-// TODO: Import necessary packages
-import 'dart:async';
-
 import 'package:flutter/material.dart';
 import 'package:meta/meta.dart';
+import 'package:task_11_api/api.dart';
 
 import 'category.dart';
 import 'unit.dart';
@@ -35,6 +33,7 @@ class _UnitConverterState extends State<UnitConverter> {
   String _convertedValue = '';
   List<DropdownMenuItem> _unitMenuItems;
   bool _showValidationError = false;
+  final api = Api();
   final _inputKey = GlobalKey(debugLabel: 'inputText');
 
   @override
@@ -42,6 +41,12 @@ class _UnitConverterState extends State<UnitConverter> {
     super.initState();
     _createDropdownMenuItems();
     _setDefaults();
+  }
+
+  @override
+  void deactivate() {
+    api.close();
+    super.deactivate();
   }
 
   @override
@@ -85,6 +90,20 @@ class _UnitConverterState extends State<UnitConverter> {
     }
   }
 
+  // Remember, the API call is an async function.
+  void _updateConversion() async {
+    if (widget.category.name == 'Currency') {
+      var conversion = _format(await api.convert(
+          Currency(_fromValue.name), Currency(_toValue.name), _inputValue));
+      setState(() => _convertedValue = conversion);
+    } else {
+      setState(() {
+        _convertedValue = _format(
+            _inputValue * (_toValue.conversion / _fromValue.conversion));
+      });
+    }
+  }
+
   /// Clean up conversion; trim trailing zeros, e.g. 5.500 -> 5.5, 10.0 -> 10
   String _format(double conversion) {
     var outputNum = conversion.toStringAsPrecision(7);
@@ -99,15 +118,6 @@ class _UnitConverterState extends State<UnitConverter> {
       return outputNum.substring(0, outputNum.length - 1);
     }
     return outputNum;
-  }
-
-  // TODO: If in the Currency [Category], call the API to retrieve the conversion.
-  // Remember, the API call is an async function.
-  void _updateConversion() {
-    setState(() {
-      _convertedValue =
-          _format(_inputValue * (_toValue.conversion / _fromValue.conversion));
-    });
   }
 
   void _updateInputValue(String input) {
@@ -172,8 +182,8 @@ class _UnitConverterState extends State<UnitConverter> {
       child: Theme(
         // This sets the color of the [DropdownMenuItem]
         data: Theme.of(context).copyWith(
-              canvasColor: Colors.grey[50],
-            ),
+          canvasColor: Colors.grey[50],
+        ),
         child: DropdownButtonHideUnderline(
           child: ButtonTheme(
             alignedDropdown: true,
@@ -181,7 +191,7 @@ class _UnitConverterState extends State<UnitConverter> {
               value: currentValue,
               items: _unitMenuItems,
               onChanged: onChanged,
-              style: Theme.of(context).textTheme.title,
+              style: Theme.of(context).textTheme.headline6,
             ),
           ),
         ),
@@ -201,9 +211,9 @@ class _UnitConverterState extends State<UnitConverter> {
           // You can read more about it here: https://flutter.io/text-input
           TextField(
             key: _inputKey,
-            style: Theme.of(context).textTheme.display1,
+            style: Theme.of(context).textTheme.headline4,
             decoration: InputDecoration(
-              labelStyle: Theme.of(context).textTheme.display1,
+              labelStyle: Theme.of(context).textTheme.headline4,
               errorText: _showValidationError ? 'Invalid number entered' : null,
               labelText: 'Input',
               border: OutlineInputBorder(
@@ -236,11 +246,11 @@ class _UnitConverterState extends State<UnitConverter> {
           InputDecorator(
             child: Text(
               _convertedValue,
-              style: Theme.of(context).textTheme.display1,
+              style: Theme.of(context).textTheme.headline4,
             ),
             decoration: InputDecoration(
               labelText: 'Output',
-              labelStyle: Theme.of(context).textTheme.display1,
+              labelStyle: Theme.of(context).textTheme.headline4,
               border: OutlineInputBorder(
                 borderRadius: BorderRadius.circular(0.0),
               ),
