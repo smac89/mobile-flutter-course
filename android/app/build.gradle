@@ -15,6 +15,7 @@ android {
 
     lintOptions {
         disable 'InvalidPackage'
+        checkReleaseBuilds false
     }
 
     defaultConfig {
@@ -32,15 +33,26 @@ android {
             signingConfig signingConfigs.debug
         }
     }
+
     compileOptions {
         targetCompatibility = 1.8
         sourceCompatibility = 1.8
     }
+
     buildToolsVersion = '29.0.3'
 
     kotlinOptions {
         jvmTarget = '1.8'
     }
+
+//    splits {
+//        abi {
+//            enable true
+//            reset()
+//            include 'x86', 'x86_64', 'armeabi-v7a', 'arm64-v8a'
+//            universalApk false
+//        }
+//    }
 }
 
 flutter {
